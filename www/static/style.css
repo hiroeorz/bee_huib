@@ -110,7 +110,7 @@ table#navbar tr td {
   font-size: 0.95em;
 }
 
-.msgbody {
+table tr td span.msgbody {
   color: #555;
   display: block;
   font-size: 0.8em;
