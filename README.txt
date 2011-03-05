@@ -7,6 +7,9 @@ To run Twoorl follow the following steps:
 - Run migrations/[1-9].sql to migrate Twoorl tables.
 - Edit src/twoorl_app.hrl with your appropriate environment variables.
 
+- Make Directory for logs
+  $ mkdir logs
+
 - Edit yaws.conf to add the ErlyWeb application settings for Twoorl.
 
 - start Yaws
