@@ -33,10 +33,10 @@ create table msg (
        usr_username varchar(30) not null,
 
        # raw data entered by the user
-       body_raw varchar(140) not null,
+       body_raw varchar(564) not null,
 
        # with pre-escaped html entities and links
-       body varchar(140) not null,
+       body varchar(564) not null,
 
        created_on timestamp,
        index(usr_id, created_on)

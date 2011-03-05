@@ -80,24 +80,45 @@ form input {
   border-bottom: #999 solid 1px;
   padding: 5px 3px;
 }
-.usrlink {
-  font-size: 1.1em;
+
+.user_link {
+  font-size: 0.8em;
 }
 
 a {
   text-decoration: none;
-  color: #00c;
+  color: #a55;
 }
 
 a:hover {
   text-decoration: underline;
 }
 a:visited {
-  color: #00c;
+  color: #a55;
+}
+
+tr td span.user_link a{
+  color: #000;
+  font-weight: bolder;
+}
+
+table#navbar tr td a {
+  font-size: 0.95em;
+}
+
+table#navbar tr td {
+  font-size: 0.95em;
+}
+
+.msgbody {
+  color: #555;
+  display: block;
+  font-size: 0.8em;
+  width: 450px;
 }
 
 .bigmsg .msgbody {
-  font-size: 3em;
+  font-size: 2.2em;
 }
 
 .time {

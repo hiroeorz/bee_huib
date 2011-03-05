@@ -5,4 +5,4 @@
 -define(DB_DATABASE, "beehuib").
 -define(DB_POOL_SIZE, 20).
 %-define(APP_PATH, "/home/yariv/apps//twoorl").
--define(APP_PATH, "/Users/yariv/apps/twoorl").
+-define(APP_PATH, "/Users/shin/src/erlyweb/bee_huib").
