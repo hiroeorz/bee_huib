@@ -1,12 +1,25 @@
 To run Twoorl follow the following steps:
 
 - Get the latest versiona of ErlyWeb (prior to 0.7.1, this would be from trunk) and Yaws
+- If installing to MacOSX, you should add +ssl when install Erlang. example: sudo port install erlang +ssl
 - Install MySQL and create a MySQL database for twoorl.
 - Run twoorl.sql to create the Twoorl tables.
+- Run migrations/[1-9].sql to migrate Twoorl tables.
 - Edit src/twoorl_app.hrl with your appropriate environment variables.
-- Compile src/twoorl.erl with 'erlc'.
+
 - Edit yaws.conf to add the ErlyWeb application settings for Twoorl.
-- Start Yaws and in the shell, type "twoorl:start()". Alternatively, pass Yaws the parameter "--runmon twoorl".
+
+- start Yaws
+  $ sudo yaws -i --conf etc/yaws.conf
+
+- connecto to mysql server in the shell, type ...
+  > erlydb:start(mysql, [{hostname, "mysql_host"}, {username, "twoorl"},{password, "twoorl"}, {database, "twoorl"}]).
+
+- compile erlang sources in the shell, type...
+  > erlyweb:compile("/Users/shin/src/erlyweb/bee_huib",[{erlydb_driver, mysql}]).
+
+- start server in the shell, type...
+  > twoorl:start().
 
 Cheers!
 Yariv
@@ -19,3 +32,7 @@ $ erl -sname twoorlapp -setcookie twoorl -mnesia dir "'twoorl.mnesia'" -yaws emb
 [ok, ok, ok, ok]
 
 # Nick Gerakines
+
+
+
+* when modified source code
