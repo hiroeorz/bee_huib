@@ -1,7 +1,7 @@
 <%@ index([{B, Username}, Navbar, Ewc, LanguageSelect]) %>
 <table id="top" class="section1">
   <tr>
-    <td id="logo"><a href="/">Twoorl</a></td>
+    <td id="logo"><a href="/">Beehuib</a></td>
     <td id="header" class="section1"><% header(B, Username) %></td>
   </tr>
 </table>
