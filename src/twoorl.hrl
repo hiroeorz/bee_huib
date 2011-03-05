@@ -27,4 +27,4 @@
 -define(Error(Msg, Params),
  	twoorl_util:log(?MODULE, ?LINE, error, fun() -> {Msg, Params} end)).
 
--define(Data(A, Data), {data, {twoorl_util:get_bundle(A), Data}}.
+-define(Data(A, Data), {data, {twoorl_util:get_bundle(A), Data}}).
