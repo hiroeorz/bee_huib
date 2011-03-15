@@ -38,6 +38,17 @@ function send() {
     }
 }
 
+function update(msg, func) {
+    if (msg.length > 0) {
+	$("#txt")[0].value = "";
+	$("#chars").text("" + maxChars);
+	$.post("/statuses/update", {"status": msg, "get_html": "false"},
+	       function(html) {
+		   func();
+	       });
+    }
+}
+
 function follow(username, val) {
     $.post("/api/follow",
 	   {"username": username,

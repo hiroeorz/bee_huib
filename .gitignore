@@ -10,3 +10,4 @@ twoorl.mnesia/
 twoorl_stats
 etc/yaws.conf
 *~
+logs

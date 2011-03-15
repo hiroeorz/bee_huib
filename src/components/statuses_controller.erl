@@ -1,5 +1,5 @@
 -module(statuses_controller).
--export([home_timeline/1, user_timeline/1, mentions/1]).
+-export([home_timeline/1, user_timeline/1, mentions/1, update/1]).
 -include("twoorl.hrl").
 
 home_timeline(A) ->
@@ -51,4 +51,71 @@ mentions(A) ->
 	      {ok, MsgData} = status:parse_to_json(Msgs, UserDict),
 
 	      {response, [{html, json:encode({array, MsgData}) }]}
+      end).
+
+update(A) ->
+    twoorl_util:auth(
+      A,
+      fun(Usr) ->
+	      Params = yaws_api:parse_post(A),
+	      {[Body], Errs} =
+		  erlyweb_forms:validate(
+		    Params, ["status"],
+		    fun("status", Val) ->
+			    case Val of
+				[] ->
+				    {error, empty_msg};
+				_ ->
+				    %% helps avoid DOS
+				    {ok, lists:sublist(Val, ?MAX_MSG_SIZE)}
+			    end
+		    end),
+	      case Errs of
+		  [] ->
+		      {Body1, BodyNoLinks, RecipientNames} =
+			  msg:process_raw_body(Body),
+
+		      Msg = msg:new_with([{usr_username, Usr:username()},
+					  {usr_id, Usr:id()},
+					  {body, Body1},
+					  {body_nolinks, BodyNoLinks},
+					  {body_raw, Body},
+					  {usr_gravatar_id,
+					   twoorl_util:gravatar_id(
+					     Usr:email())},
+					  {usr_gravatar_enabled,
+					   Usr:gravatar_enabled()},
+					  {twitter_status, 0},
+					  {spam, Usr:spammer()}]),
+		      Msg1 = Msg:save(),
+
+		      spawn(
+			fun() ->
+				RecipientIds = 
+				    usr:find(
+				      {username, in,
+				       lists:usort(
+					 [Name || Name <- RecipientNames])}),
+				reply:save_replies(Msg1:id(), RecipientIds)
+			end),
+		      
+		      case proplists:get_value("get_html", Params) of
+			  "true" ->
+			      Msg2 = msg:created_on(
+				       Msg1, calendar:local_time()),
+			      {ewc, timeline, show_msg, [A, Msg2]};
+			  _ ->
+			      {data, "ok"}
+		      end,
+
+		      {response,
+		       [{html, json:encode({struct, [{result, "success"}]}) }]};
+		  _ ->
+
+		      %% TODO need decent error reporting
+		      %%exit(Errs)
+		      {response,
+		       [{html, json:encode({struct, [{result, "error"}]}) }]}
+
+	      end
       end).
