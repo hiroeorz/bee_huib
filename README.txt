@@ -35,7 +35,3 @@ $ erl -sname twoorlapp -setcookie twoorl -mnesia dir "'twoorl.mnesia'" -yaws emb
 [ok, ok, ok, ok]
 
 # Nick Gerakines
-
-
-
-* when modified source code
