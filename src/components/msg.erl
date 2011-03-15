@@ -98,5 +98,3 @@ get_gravatar_id(Msg) ->
 	_ ->
 	    ?DEFAULT_GRAVATAR_ID
     end.
-
-    

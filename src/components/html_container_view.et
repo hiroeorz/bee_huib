@@ -27,3 +27,6 @@
 </html>
 
 <%@ header_item({feed_link, Format, Title, Href}) %> <link rel="alternate" type="application/<% Format %>" title="<% Title %>" href="<% Href %>"/>
+
+<%@ json(Data) %>
+  <% Data %>

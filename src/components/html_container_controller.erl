@@ -36,4 +36,6 @@ index(_A, Ewc, PhasedVars) ->
 		      undefined -> [];
 		      Other -> Other
 		  end,
+
     [{data, {Background, HeaderItems}}, Ewc].
+

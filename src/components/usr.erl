@@ -22,6 +22,34 @@
 -compile(export_all).
 -include("twoorl.hrl").
 
+dict(Ids) ->
+    Where = {id, in, Ids},
+    Users = usr:find(Where),
+    {ok, user_table(Users, orddict:new())}.
+
+user_table(Users, Dict) ->
+    case Users of
+	[] ->
+	    Dict;
+	[User | Tail] ->
+	    Record = {struct, [{name, binary_to_list(usr:username(User))},
+			       {id, integer_to_list(usr:id(User))}, 
+			       {statuses_count, usr:num_msgs(User)},
+			       {profile_image_url, get_icon_url(User)}]},
+	    NewDict = orddict:append(usr:id(User), Record, Dict),
+	    user_table(Tail, NewDict)
+    end.
+
+get_icon_url(Usr) ->
+    GravatarId = 
+	case usr:gravatar_enabled(Usr) of
+	    1 ->
+		twoorl_util:gravatar_id(usr:email(Usr));
+	    0 ->
+		?DEFAULT_GRAVATAR_ID
+	end,
+    twoorl_util:gravatar_link(GravatarId).
+
 get_icon(Usr) ->
     get_icon(Usr, false).
 

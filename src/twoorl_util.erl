@@ -276,6 +276,9 @@ update_session(A, Usr, Key) ->
 		  end, yaws_arg:opaque(A)),
     yaws_arg:opaque(A, Opaque1).
 
+gravatar_link(GravatarId) ->
+    Url = "http://www.gravatar.com/avatar.php?size=32&amp;gravatar_id=" ++ lists:flatten(GravatarId),
+    Url.
 
 gravatar_icon(GravatarId) ->
     [<<"<img alt=\"gravatar\" width=\"32\" height=\"32\" class=\"gravatar\" "
