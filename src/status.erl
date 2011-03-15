@@ -2,17 +2,17 @@
 -compile(export_all).
 -include("twoorl.hrl").
 
-get_count() -> 20.
+timeline_count() -> 20.
 
-parse(Msgs, UserDict) ->
-    {ok, parse(Msgs, UserDict, [])}.
+parse_to_json(Msgs, UserDict) ->
+    {ok, parse_to_json(Msgs, UserDict, [])}.
 
-parse(Msgs, UserDict, MsgList) ->
+parse_to_json(Msgs, UserDict, MsgList) ->
     case Msgs of
 	[] -> lists:reverse(MsgList);
 	[Record | Tail] ->
-	    parse(Tail, UserDict,
-		  [msg_record_for_json(Record, UserDict) | MsgList])
+	    parse_to_json(Tail, UserDict,
+			  [msg_record_for_json(Record, UserDict) | MsgList])
     end.
 
 msg_record_for_json(Msg, UserDict) ->
