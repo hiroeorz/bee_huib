@@ -99,23 +99,10 @@ update(A) ->
 				reply:save_replies(Msg1:id(), RecipientIds)
 			end),
 		      
-		      case proplists:get_value("get_html", Params) of
-			  "true" ->
-			      Msg2 = msg:created_on(
-				       Msg1, calendar:local_time()),
-			      {ewc, timeline, show_msg, [A, Msg2]};
-			  _ ->
-			      {data, "ok"}
-		      end,
-
 		      {response,
 		       [{html, json:encode({struct, [{result, "success"}]}) }]};
 		  _ ->
-
-		      %% TODO need decent error reporting
-		      %%exit(Errs)
 		      {response,
 		       [{html, json:encode({struct, [{result, "error"}]}) }]}
-
 	      end
       end).
