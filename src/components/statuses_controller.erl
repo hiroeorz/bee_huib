@@ -8,11 +8,13 @@ home_timeline(A) ->
       fun(Usr) ->
 	      Ids = usr:get_timeline_usr_ids(Usr),
 	      OrderBy = {order_by, {created_on, desc}},
-	      Limit = {limit, status:timeline_count()},	      
+	      Limit = {limit, status:timeline_count(A)},
+
 	      Where = {usr_id, in, Ids},
+	      Where1 = status:params_where(A, Where),
 
 	      %%Total = msg:count('*', Where1),
-	      Msgs = msg:find(Where, [OrderBy, Limit]),
+	      Msgs = msg:find(Where1, [OrderBy, Limit]),
 	      {ok, UserDict} = status:users_dict(Msgs),
 	      {ok, MsgData} = status:parse_to_json(Msgs, UserDict),
 
@@ -24,10 +26,11 @@ user_timeline(A) ->
       A,
       fun(Usr) ->
 	      OrderBy = {order_by, {created_on, desc}},
-	      Limit = {limit, status:timeline_count()},	      
+	      Limit = {limit, status:timeline_count(A)},	      
 	      Where = {usr_id, '=', Usr:id()},
+	      Where1 = status:params_where(A, Where),
 
-	      Msgs = msg:find(Where, [OrderBy, Limit]),
+	      Msgs = msg:find(Where1, [OrderBy, Limit]),
 	      {ok, UserDict} = status:users_dict(Msgs),
 	      {ok, MsgData} = status:parse_to_json(Msgs, UserDict),
 
@@ -43,10 +46,11 @@ mentions(A) ->
 	      ReplyIds = status:reply_msg_ids(Replys),
 
 	      Where1 = {id, in, ReplyIds},
+	      Where2 = status:params_where(A, Where1),
 	      OrderBy = {order_by, {created_on, desc}},
-	      Limit = {limit, status:timeline_count()},	      
+	      Limit = {limit, status:timeline_count(A)},	      
 
-	      Msgs = msg:find(Where1, [OrderBy, Limit]),
+	      Msgs = msg:find(Where2, [OrderBy, Limit]),
 	      {ok, UserDict} = status:users_dict(Msgs),
 	      {ok, MsgData} = status:parse_to_json(Msgs, UserDict),
 

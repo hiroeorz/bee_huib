@@ -2,8 +2,6 @@
 -compile(export_all).
 -include("twoorl.hrl").
 
-timeline_count() -> 20.
-
 parse_to_json(Msgs, UserDict) ->
     {ok, parse_to_json(Msgs, UserDict, [])}.
 
@@ -22,9 +20,13 @@ msg_record_for_json(Msg, UserDict) ->
     MsgUserId = msg:usr_id(Msg),
     {ok, [UserStruct| _]} = orddict:find(MsgUserId, UserDict),
 
+    {datetime, Date} = msg:created_on(Msg),
+    {ok, FormattedDate} = twoorl_util:format_datetime_string(Date),
+
     {struct, [{text, MsgBody}, 
 	      {id,   MsgId},
-	      {user, UserStruct}]}.
+	      {user, UserStruct},
+	      {created_at, FormattedDate}]}.
 
 user_record_for_json(User) ->
     {struct, [{username, usr:username(User)}]}.
@@ -53,4 +55,20 @@ reply_msg_ids(Replys, MsgIds) ->
 	    MsgIds;
 	[Reply | Tail] ->
 	    reply_msg_ids(Tail, [reply:msg_id(Reply) | MsgIds])
+    end.
+
+timeline_count(A) -> 
+    case yaws_api:getvar(A, count) of
+	{ok, Count} -> list_to_integer(Count);
+	undefined     -> 20
+    end.
+
+params_where(A, Where) ->
+    Where1 = where_since_id(A, Where),
+    Where1.
+
+where_since_id(A, Where) ->
+    case yaws_api:getvar(A, since_id) of
+	{ok, SinceId} -> {'and', [{id, '>', SinceId}, Where]};
+	undefined     -> Where
     end.

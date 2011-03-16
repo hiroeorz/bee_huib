@@ -325,6 +325,27 @@ format_datetime({Date = {Year, Month, Day}, {Hour, Minute, Second}}) ->
      itos(Year), 32, itos(Hour, 2), $:, itos(Minute, 2), $:, itos(Second, 2),
      <<" GMT">>].
 
+format_datetime_string(Date) ->
+    {{Year, Month, Day}, {Hour, Min, Sec}} = Date,
+
+    YearStr = integer_to_list(Year),
+    MonthStr = string:right(integer_to_list(Month), 2, $0),
+    DayStr  = string:right(integer_to_list(Day), 2, $0),
+    HourStr = string:right(integer_to_list(Hour), 2, $0),
+    MinStr = string:right(integer_to_list(Min), 2, $0),
+    SecStr = string:right(integer_to_list(Sec), 2, $0),
+
+    Daynum = calendar:day_of_the_week({Year, Month, Day}),
+    DayOfWeek = twoorl_util:day(Daynum),
+    Mon = twoorl_util:mon(Month),
+
+    FormattedDate = 
+	lists:flatten(io_lib:format("~s ~s ~s ~s:~s:~s +0000 ~s",
+				    [DayOfWeek, Mon, DayStr, 
+				     HourStr, MinStr, SecStr,
+				     YearStr])),
+    {ok, FormattedDate}.
+
 itos(N) ->
     integer_to_list(N).
 itos(N, Length) ->
