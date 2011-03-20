@@ -75,3 +75,36 @@ function toggle_twitter(input) {
 	   });
 }
 
+function twoorl_status(facility, since_id, count, call_back) {
+    var url = "http://localhost/statuses/" + facility;
+    var params_added = false;
+
+    if (since_id != undefined) {
+	url += "?since_id=" + since_id;
+	params_added = true;
+    }
+
+    if (count != undefined) {
+	if (params_added) {
+	    url += "&count=" + count;
+	} else {
+	    url += "?count=" + count;
+	    params_added = true
+	}
+    }
+
+    alert("nyaooho");
+    $.get("/statuses/home_timeline", {},
+	  function(html) {
+	      alert("helo");
+	  });
+
+    $.ajax({
+	url: "/statuses/home_timeline",
+	cache: false,
+	success: function(html) {
+	    alert(html)
+	}
+    })
+
+}

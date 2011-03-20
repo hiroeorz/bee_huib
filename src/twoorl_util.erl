@@ -340,7 +340,7 @@ format_datetime_string(Date) ->
     Mon = twoorl_util:mon(Month),
 
     FormattedDate = 
-	lists:flatten(io_lib:format("~s ~s ~s ~s:~s:~s +0000 ~s",
+	lists:flatten(io_lib:format("~s ~s ~s ~s:~s:~s +0900 ~s",
 				    [DayOfWeek, Mon, DayStr, 
 				     HourStr, MinStr, SecStr,
 				     YearStr])),

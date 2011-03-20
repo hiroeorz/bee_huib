@@ -1,6 +1,16 @@
 -module(statuses_controller).
--export([home_timeline/1, user_timeline/1, mentions/1, update/1]).
+-export([test/1, home_timeline/1, user_timeline/1, mentions/1, update/1]).
 -include("twoorl.hrl").
+
+test(A) ->
+    {response, [{html, "helo xhr2"},
+		{header, {content_type, "application/json"}},
+		{header, {"Access-Control-Allow-Headers",
+			  "Content-Type"}},
+		{header, {"Access-Control-Allow-Methods",
+			  "GET, POST, OPTIONS, PUT"}},
+		{header, {"Access-Control-Allow-Origin",
+			  "http://localhost:3000"}}]}.
 
 home_timeline(A) ->
     twoorl_util:auth(
@@ -18,7 +28,16 @@ home_timeline(A) ->
 	      {ok, UserDict} = status:users_dict(Msgs),
 	      {ok, MsgData} = status:parse_to_json(Msgs, UserDict),
 
-	      {response, [{html, json:encode({array, MsgData}) }]}
+	      {response, [{html, json:encode({array, MsgData}) }, 
+			 {header, {content_type, "application/json"}},
+			  {header, {"Access-Control-Allow-Headers",
+				    "Content-Type"}},
+			  {header, {"Access-Control-Allow-Methods",
+				    "GET, POST, OPTIONS, PUT"}},
+			  {header, {"Access-Control-Allow-Origin", 
+				    "http://localhost:3000"}},
+			  {header, {"Access-Control-Allow-Credentials", 
+				    "true"}}]}
       end).
 
 user_timeline(A) ->
@@ -34,7 +53,16 @@ user_timeline(A) ->
 	      {ok, UserDict} = status:users_dict(Msgs),
 	      {ok, MsgData} = status:parse_to_json(Msgs, UserDict),
 
-	      {response, [{html, json:encode({array, MsgData}) }]}
+	      {response, [{html, json:encode({array, MsgData}) }, 
+			 {header, {content_type, "application/json"}},
+			  {header, {"Access-Control-Allow-Headers",
+				    "Content-Type"}},
+			  {header, {"Access-Control-Allow-Methods",
+				    "GET, POST, OPTIONS, PUT"}},
+			  {header, {"Access-Control-Allow-Origin", 
+				    "http://localhost:3000"}},
+			  {header, {"Access-Control-Allow-Credentials", 
+				    "true"}}]}
       end).
 
 mentions(A) ->
@@ -54,7 +82,16 @@ mentions(A) ->
 	      {ok, UserDict} = status:users_dict(Msgs),
 	      {ok, MsgData} = status:parse_to_json(Msgs, UserDict),
 
-	      {response, [{html, json:encode({array, MsgData}) }]}
+	      {response, [{html, json:encode({array, MsgData}) }, 
+			 {header, {content_type, "application/json"}},
+			  {header, {"Access-Control-Allow-Headers",
+				    "Content-Type"}},
+			  {header, {"Access-Control-Allow-Methods",
+				    "GET, POST, OPTIONS, PUT"}},
+			  {header, {"Access-Control-Allow-Origin", 
+				    "http://localhost:3000"}},
+			  {header, {"Access-Control-Allow-Credentials", 
+				    "true"}}]}
       end).
 
 update(A) ->
@@ -102,11 +139,29 @@ update(A) ->
 					 [Name || Name <- RecipientNames])}),
 				reply:save_replies(Msg1:id(), RecipientIds)
 			end),
-		      
-		      {response,
-		       [{html, json:encode({struct, [{result, "success"}]}) }]};
+
+		      {response, 
+		       [{html, json:encode({struct, [{result, "success"}]}) }, 
+			{header, {content_type, "application/json"}},
+			{header, {"Access-Control-Allow-Headers",
+				  "Content-Type"}},
+			{header, {"Access-Control-Allow-Methods",
+				  "GET, POST, OPTIONS, PUT"}},
+			{header, {"Access-Control-Allow-Origin", 
+				  "http://localhost:3000"}},
+			{header, {"Access-Control-Allow-Credentials", 
+				  "true"}}]};
 		  _ ->
-		      {response,
-		       [{html, json:encode({struct, [{result, "error"}]}) }]}
+		      {response, 
+		       [{html, json:encode({struct, [{result, "error"}]}) }, 
+			{header, {content_type, "application/json"}},
+			{header, {"Access-Control-Allow-Headers",
+				  "Content-Type"}},
+			{header, {"Access-Control-Allow-Methods",
+				  "GET, POST, OPTIONS, PUT"}},
+			{header, {"Access-Control-Allow-Origin", 
+				  "http://localhost:3000"}},
+			{header, {"Access-Control-Allow-Credentials", 
+				  "true"}}]}
 	      end
       end).
