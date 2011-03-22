@@ -72,3 +72,18 @@ where_since_id(A, Where) ->
 	{ok, SinceId} -> {'and', [{id, '>', SinceId}, Where]};
 	undefined     -> Where
     end.
+
+jsonp_response(JsonData) ->
+    {response, [{html, JsonData }]}. 
+
+xhr2_response(JsonData) -> 
+    {response, [{html, JsonData }, 
+		{header, {content_type, "application/json"}},
+		{header, {"Access-Control-Allow-Headers",
+			  "Content-Type"}},
+		{header, {"Access-Control-Allow-Methods",
+				    "GET, POST, OPTIONS, PUT"}},
+		{header, {"Access-Control-Allow-Origin", 
+			  "http://localhost:3000"}},
+		{header, {"Access-Control-Allow-Credentials", 
+			  "true"}}]}.

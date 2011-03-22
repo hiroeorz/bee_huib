@@ -28,16 +28,17 @@ home_timeline(A) ->
 	      {ok, UserDict} = status:users_dict(Msgs),
 	      {ok, MsgData} = status:parse_to_json(Msgs, UserDict),
 
-	      {response, [{html, json:encode({array, MsgData}) }, 
-			 {header, {content_type, "application/json"}},
-			  {header, {"Access-Control-Allow-Headers",
-				    "Content-Type"}},
-			  {header, {"Access-Control-Allow-Methods",
-				    "GET, POST, OPTIONS, PUT"}},
-			  {header, {"Access-Control-Allow-Origin", 
-				    "http://localhost:3000"}},
-			  {header, {"Access-Control-Allow-Credentials", 
-				    "true"}}]}
+	      JsonData = json:encode({array, MsgData}),
+	      
+	      case yaws_api:getvar(A, callback) of
+		  {ok, CallBack} ->
+		      Script = lists:flatten(io_lib:format("~s('~s');", 
+							   [CallBack, 
+							    JsonData])),
+		      status:jsonp_response(Script);
+		  _ -> 
+		      status:xhr2_response(JsonData)
+	      end
       end).
 
 user_timeline(A) ->
@@ -53,16 +54,8 @@ user_timeline(A) ->
 	      {ok, UserDict} = status:users_dict(Msgs),
 	      {ok, MsgData} = status:parse_to_json(Msgs, UserDict),
 
-	      {response, [{html, json:encode({array, MsgData}) }, 
-			 {header, {content_type, "application/json"}},
-			  {header, {"Access-Control-Allow-Headers",
-				    "Content-Type"}},
-			  {header, {"Access-Control-Allow-Methods",
-				    "GET, POST, OPTIONS, PUT"}},
-			  {header, {"Access-Control-Allow-Origin", 
-				    "http://localhost:3000"}},
-			  {header, {"Access-Control-Allow-Credentials", 
-				    "true"}}]}
+	      JsonData = json:encode({array, MsgData}),
+	      status:xhr2_response(JsonData)
       end).
 
 mentions(A) ->
@@ -72,26 +65,18 @@ mentions(A) ->
 	      Where = {usr_id, '=', Usr:id()},
 	      Replys = reply:find(Where),
 	      ReplyIds = status:reply_msg_ids(Replys),
-
+	      
 	      Where1 = {id, in, ReplyIds},
 	      Where2 = status:params_where(A, Where1),
 	      OrderBy = {order_by, {created_on, desc}},
 	      Limit = {limit, status:timeline_count(A)},	      
-
+	      
 	      Msgs = msg:find(Where2, [OrderBy, Limit]),
 	      {ok, UserDict} = status:users_dict(Msgs),
 	      {ok, MsgData} = status:parse_to_json(Msgs, UserDict),
-
-	      {response, [{html, json:encode({array, MsgData}) }, 
-			 {header, {content_type, "application/json"}},
-			  {header, {"Access-Control-Allow-Headers",
-				    "Content-Type"}},
-			  {header, {"Access-Control-Allow-Methods",
-				    "GET, POST, OPTIONS, PUT"}},
-			  {header, {"Access-Control-Allow-Origin", 
-				    "http://localhost:3000"}},
-			  {header, {"Access-Control-Allow-Credentials", 
-				    "true"}}]}
+	      
+	      JsonData = json:encode({array, MsgData}),
+	      status:xhr2_response(JsonData)
       end).
 
 update(A) ->
@@ -140,28 +125,10 @@ update(A) ->
 				reply:save_replies(Msg1:id(), RecipientIds)
 			end),
 
-		      {response, 
-		       [{html, json:encode({struct, [{result, "success"}]}) }, 
-			{header, {content_type, "application/json"}},
-			{header, {"Access-Control-Allow-Headers",
-				  "Content-Type"}},
-			{header, {"Access-Control-Allow-Methods",
-				  "GET, POST, OPTIONS, PUT"}},
-			{header, {"Access-Control-Allow-Origin", 
-				  "http://localhost:3000"}},
-			{header, {"Access-Control-Allow-Credentials", 
-				  "true"}}]};
+		      JsonData = json:encode({struct, [{result, "success"}]}),
+		      status:xhr2_response(JsonData);
 		  _ ->
-		      {response, 
-		       [{html, json:encode({struct, [{result, "error"}]}) }, 
-			{header, {content_type, "application/json"}},
-			{header, {"Access-Control-Allow-Headers",
-				  "Content-Type"}},
-			{header, {"Access-Control-Allow-Methods",
-				  "GET, POST, OPTIONS, PUT"}},
-			{header, {"Access-Control-Allow-Origin", 
-				  "http://localhost:3000"}},
-			{header, {"Access-Control-Allow-Credentials", 
-				  "true"}}]}
+		      JsonData = json:encode({struct, [{result, "error"}]}),
+		      status:xhr2_response(JsonData)
 	      end
       end).
