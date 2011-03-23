@@ -3,6 +3,7 @@
 -define(DB_USERNAME, "beehuib").
 -define(DB_PASSWORD, "beehuib").
 -define(DB_DATABASE, "beehuib").
+-define(DB_ENCODING, utf8).
 -define(DB_POOL_SIZE, 20).
 %-define(APP_PATH, "/home/yariv/apps//twoorl").
 -define(APP_PATH, "/Users/shin/src/erlyweb/bee_huib").

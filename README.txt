@@ -16,7 +16,7 @@ To run Twoorl follow the following steps:
   $ sudo yaws -i --conf etc/yaws.conf
 
 - connecto to mysql server in the shell, type ...
-  > erlydb:start(mysql, [{hostname, "localhost"}, {username, "beehuib"},{password, "beehuib"}, {database, "beehuib"}]).
+  > erlydb:start(mysql, [{hostname, "localhost"}, {username, "beehuib"},{password, "beehuib"}, {database, "beehuib"}, {encoding, utf8}]).
 
 - compile erlang sources in the shell, type...
   > erlyweb:compile("/Users/shin/src/erlyweb/bee_huib",[{erlydb_driver, mysql}]).

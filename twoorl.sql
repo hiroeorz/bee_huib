@@ -2,7 +2,7 @@ drop table if exists usr;
 create table usr (
        id integer unsigned auto_increment primary key,
        username varchar(30) not null,
-       password char(20) not null,
+       password binary(20) not null,
        email varchar(50) not null,
        num_msgs integer unsigned not null default 0,
        num_replies integer unsigned not null default 0,

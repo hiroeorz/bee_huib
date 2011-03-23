@@ -153,7 +153,7 @@ init_mysql() ->
     erlydb:start(mysql,
 		 [{hostname, ?DB_HOSTNAME},
 		  {username, ?DB_USERNAME}, {password, ?DB_PASSWORD},
-		  {database, ?DB_DATABASE},
+		  {database, ?DB_DATABASE}, {encoding, ?DB_ENCODING},
 		  {logfun, fun log/4}]),
     lists:foreach(
       fun(_) ->
